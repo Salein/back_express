@@ -48,7 +48,7 @@ class PostController {
     async delete(req, res) {
         try {
             const {id} = req.params
-            if (!post._id) {
+            if (!id) {
                 res.status(400).json({message: 'Id не указан'})
             }
             const post = await Post.findByIdAndDelete(id)
