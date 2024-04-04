@@ -6,13 +6,9 @@ class PostService {
         return createdPost
     }
 
-    async getAll(req, res) {
-        try {
+    async getAll() {
             const posts = await Post.find()
-            return res.json(posts)
-        } catch (e) {
-            res.status(500).json(e)
-        }
+            return posts
     }
 
     async getOne(id) {
@@ -23,32 +19,22 @@ class PostService {
         return post
     }
 
-    async update(req, res) {
-        try {
-            const post = req.body
+    async update(post) {
             if (!post._id) {
-                res.status(400).json({ message: "Id не указан" })
+                throw new Error("ID не указан")
             }
             const updatedPost = await Post.findByIdAndUpdate(post._id, post, {
                 new: true,
             })
-            return res.json(updatedPost)
-        } catch (e) {
-            res.status(500).json(e)
-        }
+            return updatedPost
     }
 
-    async delete(req, res) {
-        try {
-            const { id } = req.params
+    async delete(id) {
             if (!id) {
-                res.status(400).json({ message: "Id не указан" })
+                throw new Error("ID не указан")
             }
             const post = await Post.findByIdAndDelete(id)
-            return res.json(post)
-        } catch (e) {
-            res.status(500).json(e)
-        }
+            return post
     }
 }
 

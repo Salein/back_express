@@ -13,9 +13,9 @@ class PostController {
 
     async getAll(req, res) {
         try {
-            const posts = await Post.find()
+            const posts = await PostService.getAll()
             return res.json(posts)
-        } catch(e) {
+        } catch (e) {
             res.status(500).json(e)
         }
     }
@@ -24,37 +24,24 @@ class PostController {
         try {
             const post = await PostService.getOne(req.params.id)
             return res.json(post)
-        } catch(e) {
+        } catch (e) {
             res.status(500).json(e)
         }
     }
 
     async update(req, res) {
-        try {
-            const post = req.body
-            if (!post._id) {
-                res.status(400).json({message: 'Id не указан'})
-            }
-                const updatedPost = await Post.findByIdAndUpdate(post._id, post, {new: true})
-                return res.json(updatedPost)
-        } catch(e) {
-            res.status(500).json(e)
-        }
+        const updatedPost = await PostService.update(req.body)
+        return res.json(updatedPost)
     }
 
     async delete(req, res) {
         try {
-            const {id} = req.params
-            if (!id) {
-                res.status(400).json({message: 'Id не указан'})
-            }
-            const post = await Post.findByIdAndDelete(id)
+            const post = await PostService.delete(req.params.id)
             return res.json(post)
-        } catch(e) {
+        } catch (e) {
             res.status(500).json(e)
         }
     }
 }
-
 
 export default new PostController()
